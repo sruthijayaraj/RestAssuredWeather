@@ -7,3 +7,4 @@ RestAssured API for Weather - with filter conditions
 http://localhost:63342/RestAutomation/reports/html-reports/cucumber-html-reports/report-feature_149025780.html?
  * API key and base URL is hardcoded in services package
 *  Filters are places in FilterUtility
+* mvn  clean , mvn verify used for executing and generating reports.
