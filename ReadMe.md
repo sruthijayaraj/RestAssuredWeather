@@ -2,9 +2,9 @@ RestAssured API for Weather - with filter conditions
 
 Installation (Pre-requisites)
 
-* jdk15
+* jdk1.8 or higher
 * Maven
-*IntelliJ IDEA/jdk15
+*IntelliJ IDEA/jdk1.8 or higher
 * IntelliJ IDEA - plugins for  cucumber, configuration,compiler, cucumber reporting
 *Reports and also in the console:
 http://localhost:63342/RestAutomation/reports/html-reports/cucumber-html-reports/report-feature_149025780.html?
