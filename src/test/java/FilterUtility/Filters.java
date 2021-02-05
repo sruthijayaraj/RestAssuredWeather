@@ -67,7 +67,7 @@ public class Filters {
     }
 
     public LocalDate getDay(String day){
-        var date=  LocalDate.parse(day, DateTimeFormatter.ISO_DATE);
+        LocalDate date =  LocalDate.parse(day, DateTimeFormatter.ISO_DATE);
         return date;
     }
 
