@@ -14,7 +14,7 @@ http://localhost:63342/RestAutomation/reports/html-reports/cucumber-html-reports
 
 ### Features
 
-Feature file includes the scenario of checking on the weather options with scenario outline with examples
+Feature file includes the scenario of checking on the weather options with scenario outline , examples
 
 ### How to run tests
 mvn  clean , mvn  install verify used for executing and generating reports.
