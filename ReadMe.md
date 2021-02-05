@@ -24,7 +24,7 @@ mvn  clean , mvn  install verify used for executing and generating reports.
  * API key and base URL is hardcoded in services package
 *  Filters are places in FilterUtility
 * mvn  clean , mvn  install verify used for executing and generating reports.
-* used jdk15 , mvn compiler plugin is to 10 (target and source)
+* used jdk1.8 , mvn compiler plugin is to 1.8 (target and source)
 * Reports are generated in http://localhost:63342/RestAutomation/reports/html-reports/cucumber-html-reports/report-feature_149025780.html?
 and /RestAutomation/target/cucumber-reports/cucumber.html?
   * Scenario outline in the feature file
