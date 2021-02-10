@@ -1,7 +1,10 @@
 package stepdefs;
 
 
+
 import io.cucumber.java.After;
+import io.cucumber.java.Before;
+import io.cucumber.java.BeforeStep;
 import io.cucumber.java.Scenario;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -12,7 +15,9 @@ import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import org.junit.Assert;
 import pojo.ResponseObject;
+
 import services.GetRequest;
+import configs.ConfigFileReader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +31,7 @@ public class WeatherStepDefinitions {
 	private ValidatableResponse json;
 	private RequestSpecification request;
 	private Scenario scenario;
+	private GetRequest getService;
 
 	public static HashMap<String, String> requestParameters = new HashMap<>();
 	public static ArrayList<String> searchCriteria = new ArrayList<>();
@@ -33,17 +39,34 @@ public class WeatherStepDefinitions {
 	List<ResponseObject> filteredByTemp = new ArrayList<ResponseObject>() ;
 	List<ResponseObject> filteredByUv = new ArrayList<ResponseObject>() ;
 	public  List<ResponseObject> finalList = new ArrayList<ResponseObject>() ;
+	public ConfigFileReader conf;
 
 
 	Filters filtersUtility ;
-
 	public WeatherStepDefinitions(){
+	}
 
+
+	//TO BE USED WHEN TROUBLE SHOOTING FAILURES
+	@BeforeStep("@troubleShoot")
+	public void logStep(Scenario scenario){
+		System.out.println("\n Scenario :" + scenario.getName());
+		System.out.println("\n \n Step line :"+ scenario.getLine());
+		// logs to help trouble shoot failures
+		System.out.println(scenario.getStatus());
+	}
+
+
+
+	@Given("^all API configurations are set$")
+	public void setALLAPIPrerequisite(){
+		conf = new ConfigFileReader();
+		getService = new GetRequest(conf.getBaseUrl(),conf.getAPIKey());
 	}
 
 	@Given("^I like to surf in any beach of (.*)$")
 	public void userSetsStateAndCountry(String param){
-    	requestParameters.put("city:" , param);
+		requestParameters.put("city:" , param);
 	}
 
 	@And("^I only like to surf on any 2 days specifically (.*) & (.*) in next 16 Days$")
@@ -55,7 +78,7 @@ public class WeatherStepDefinitions {
 	public void getWeatherForNextDatesUsingPostcode(String postalCode){
 		requestParameters.put("postal_code",postalCode);
 		requestParameters.put("units","M");
-		response = new GetRequest().getWeatherReport(requestParameters);
+		response = getService.getWeatherReport(requestParameters);
 		filtersUtility= new Filters(response,responseObjects,filteredByTemp);
 		System.out.println("response: " + response.prettyPrint());
 	}
@@ -64,10 +87,9 @@ public class WeatherStepDefinitions {
 	public void searchDataWithTempBetween(String min, String max)  {
 		float min_temp=Float.parseFloat(min);
 		float max_temp = Float.parseFloat(max);
- 		searchCriteria.add(min);
+		searchCriteria.add(min);
 		searchCriteria.add(max);
 		filteredByTemp=filtersUtility.filterDataBasedOnTempLimits(min_temp,max_temp);
-
 	}
 
 
@@ -82,8 +104,6 @@ public class WeatherStepDefinitions {
 	public void pickTwoDays(){
 
 		finalList =filtersUtility.searchAndFilterBasedOnUserGivenTwoDays(searchCriteria.get(0),searchCriteria.get(1));
-
-
 		System.out.println("Printing final dates");
 		//Assert the final dates are under the required UV index
 		for (ResponseObject finalOne : finalList) {
@@ -93,7 +113,6 @@ public class WeatherStepDefinitions {
 			System.out.println("UV : "+finalOne.getUv());
 			Assert.assertTrue((finalOne.getUv() < Float.parseFloat(searchCriteria.get(4))));
 		}
-
 	}
 
 
@@ -119,10 +138,6 @@ public class WeatherStepDefinitions {
 						scenario.log("Min temperature on the day is " + finalOne.getMin_temp());
 						System.out.println("UV:" + finalOne.getUv());
 						scenario.log("UV:" + finalOne.getUv());
-
-
-
-
 					}
 				}
 

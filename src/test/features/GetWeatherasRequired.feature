@@ -1,5 +1,8 @@
 Feature: Get Weather update for surfing
 
+	Background:
+		Given all API configurations are set
+
 
 	Scenario Outline: As a choosey surfer
 
